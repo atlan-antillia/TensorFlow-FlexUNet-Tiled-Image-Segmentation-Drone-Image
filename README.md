@@ -34,7 +34,7 @@ We applied our Tiled-Image Segmentation inference method to predict mask regions
 with the original resolution.
 <br><br>
 <hr>
-<b>Actual Image Segmentation for the original Drone-Image Images of 3.8K to 4.6K pixels</b><br>
+<b>Actual Image Segmentation for the original Drone Images of 3.8K to 4.6K pixels</b><br>
 As shown below, the tiled_inferred masks predicted by our segmentation model trained on the 
 Tiled dataset appear similar to the ground truth masks, but they lack precision in certain areas.<br>
 <b>rgb_map= {Outdoor structures:(237,237,237), Buildings:(181,0,0),Paved ground:(135,135,135),Non-paved ground:(189,107,0),<br>
@@ -375,7 +375,7 @@ python ../../../src/TensorFlowFlexUNetTiledInferencer.py ./train_eval_infer.conf
 <img src="./projects/TensorFlowFlexUNet/Drone-Image/asset/mini_test_output_tiled.png" width="1024" height="auto"><br>
 <br>
 <hr>
-<b>Enlarged images and masks for the original Drone-Image Images of 3.8K to 4.6K  pixels</b><br>
+<b>Enlarged images and masks for the original Drone Images of 3.8K to 4.6K  pixels</b><br>
 As shown below, the tiled_inferred masks predicted by our segmentation model trained on the 
 Tiled dataset appear similar to the ground truth masks, but they lack precision in certain areas.<br>
 <b>rgb_map= {Outdoor structures:(237,237,237), Buildings:(181,0,0),Paved ground:(135,135,135),Non-paved ground:(189,107,0),<br>
