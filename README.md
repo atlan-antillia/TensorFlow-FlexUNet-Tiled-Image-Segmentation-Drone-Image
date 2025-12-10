@@ -1,8 +1,15 @@
-<h2>TensorFlow-FlexUNet-Tiled-Image-Segmentation-Drone-Image (2025/12/02)</h2>
-
+<h2>TensorFlow-FlexUNet-Tiled-Image-Segmentation-Drone-Image (Updated: 2025/12/10)</h2>
 Toshiyuki Arai<br>
 Software Laboratory antillia.com<br>
 <br>
+<li>
+2025/12/07: Modified <b>base_kernels</b> to (11,11) and enabled <b>input_normalization</b> in 
+<a href="./projects/TensorFlowFlexUNet/Drone-Image/train_eval_infer.config"><b>train_eval_infer.config</b></a> to improve 
+segmentation accuracy, 
+and retrained the segmentation model. 
+</li>
+<br>
+
 This is the first experiment of Image Segmentation for <b>Drone-Image</b>  based on 
 our <a href="./src/TensorFlowFlexUNet.py">TensorFlowFlexUNet</a>
  (<b>TensorFlow Flexible UNet Image Segmentation Model for Multiclass</b>)
@@ -37,8 +44,7 @@ with the original resolution.
 <b>Actual Image Segmentation for the original Drone Images of 3.8K to 4.6K pixels</b><br>
 As shown below, the tiled_inferred masks predicted by our segmentation model trained on the 
 Tiled dataset appear similar to the ground truth masks, but they lack precision in certain areas.<br>
-<b>rgb_map= {Outdoor structures:(237,237,237), Buildings:(181,0,0),Paved ground:(135,135,135),Non-paved ground:(189,107,0),
-Train tracks:(128,0,128),Plants:(31,123,22),Wheeled vehicles:(6,0,30),Water:(0,168,255),People:(240,255,0)}</b>
+<a href="#color_class_mapping_table">Drone Image color-class-mapping-table</a>
 <br>
 <br>
 <table>
@@ -167,22 +173,22 @@ We used the following two Python scripts to generate our tiled dataset.
 We generated our augmented Tiled Drone-Image from the original train <b>Drone-Image</b>  by using an offline
 augmentation tool <a href="./generator/TiledImageMaskDatasetGenerator.py">TiledImageMaskDatasetGenerator.py</a><br>
 We also used the following category and color mapping table in the Generator script to generate our colorized masks<br>
-<table border="1" style="border-collapse: collapse;">
-<tr><th>Mask value</th><th>Category</th><th>RGB triplet</th></tr>
-
-<tr><td>0</td><td>Background</td><td>(0,0,0)</td><tr>
-<tr><td>1</td><td>Outdoorstructures</td><td>(237,237,237)</td><tr>
-<tr><td>2</td><td>Buildings</td><td>(181,0,0)</td><tr>
-<tr><td>3</td><td>Pavedground</td><td>(135,135,135)</td><tr>
-<tr><td>4</td><td>Non-pavedground</td><td>(189,107,0])</td><tr>
-<tr><td>5</td><td>Traintracks</td><td>(128,0,128)</td><tr>
-<tr><td>6</td><td>Plants</td><td>(31,123,22)</td><tr>
-<tr><td>7</td><td>Wheeledvehicles</td><td>(6,0,130)</td><tr>
-<tr><td>8</td><td>Water</td><td>(0,168,255)</td><tr>
-<tr><td>9</td><td>People</td><td>(240,255,0)</td><tr>
+<br>
+<b><a id ="color_class_mapping_table">Drone Image color-class-mapping-table</a></b><br>
+<table border=1 style='border-collapse:collapse;' cellpadding='5'>
+<caption>Drone Image 9 classes</caption>
+<tr><th>Indexed Color</th><th>Color</th><th>RGB</th><th>Class</th></tr>
+<tr><td>1</td><td with='80' height='auto'><img src='./color_class_mapping/Outdoorstructures.png' widith='40' height='25'</td><td>(237, 237, 237)</td><td>Outdoorstructures</td></tr>
+<tr><td>2</td><td with='80' height='auto'><img src='./color_class_mapping/Buildings.png' widith='40' height='25'</td><td>(181, 0, 0)</td><td>Buildings</td></tr>
+<tr><td>3</td><td with='80' height='auto'><img src='./color_class_mapping/Pavedground.png' widith='40' height='25'</td><td>(135, 135, 135)</td><td>Pavedground</td></tr>
+<tr><td>4</td><td with='80' height='auto'><img src='./color_class_mapping/Non-pavedground.png' widith='40' height='25'</td><td>(189, 107, 0)</td><td>Non-pavedground</td></tr>
+<tr><td>5</td><td with='80' height='auto'><img src='./color_class_mapping/Traintracks.png' widith='40' height='25'</td><td>(128, 0, 128)</td><td>Traintracks</td></tr>
+<tr><td>6</td><td with='80' height='auto'><img src='./color_class_mapping/Plants.png' widith='40' height='25'</td><td>(31, 123, 22)</td><td>Plants</td></tr>
+<tr><td>7</td><td with='80' height='auto'><img src='./color_class_mapping/Wheeledvehicles.png' widith='40' height='25'</td><td>(6, 0, 130)</td><td>Wheeledvehicles</td></tr>
+<tr><td>8</td><td with='80' height='auto'><img src='./color_class_mapping/Water.png' widith='40' height='25'</td><td>(0, 168, 255)</td><td>Water</td></tr>
+<tr><td>9</td><td with='80' height='auto'><img src='./color_class_mapping/People.png' widith='40' height='25'</td><td>(240, 255, 0)</td><td>People</td></tr>
 </table>
 <br>
-
 <h4>2.3 Tiled Drone-Image Samples</h4>
 
 <b>Train_images_sample</b><br>
@@ -208,7 +214,7 @@ Please move to ./projects/TensorFlowFlexUNet/Drone-Image and, and run the follow
 <hr>
 
 <b>Model parameters</b><br>
-Defined a small <b>base_filters = 16</b> and small <b>base_kernels = (5,5)</b> for the first Conv Layer of Encoder Block of 
+Defined a small <b>base_filters = 16</b> and large <b>base_kernels = (11,11)</b> for the first Conv Layer of Encoder Block of 
 <a href="./src/TensorFlowFlexUNet.py">TensorFlowFlexUNet.py</a> 
 and a large num_layers (including a bridge between Encoder and Decoder Blocks).
 <pre>
@@ -216,11 +222,12 @@ and a large num_layers (including a bridge between Encoder and Decoder Blocks).
 image_width    = 512
 image_height   = 512
 image_channels = 3
+input_normalization = True
 
 num_classes    = 10
 
 base_filters   = 16
-base_kernels   = (7,7)
+base_kernels   = (11,11)
 num_layers     = 8
 dropout_rate   = 0.05
 dilation       = (1,1)
@@ -267,7 +274,10 @@ patience      = 10
 </pre>
 
 <b>RGB Color map</b><br>
-rgb color map dict for Drone-Image 1+1 classes.
+rgb color map dict for Drone-Image 1+9 classes.
+<a href="#color_class_mapping_table">Drone Image color-class-mapping-table</a>
+<br>
+<br>
 <pre>
 [mask]
 mask_datatype    = "categorized"
@@ -303,17 +313,17 @@ By using this callback, on every epoch_change, the tiled inference procedure can
 <b>Epoch_change_inference output at starting (epoch 1,2,3,4)</b><br>
 <img src="./projects/TensorFlowFlexUNet/Drone-Image/asset/epoch_change_infer_at_start.png" width="1024" height="auto"><br>
 <br>
-<b>Epoch_change_inference output at middlepoint (epoch 24,25,26,27)</b><br>
+<b>Epoch_change_inference output at middlepoint (epoch 22,23,24,25)</b><br>
 <img src="./projects/TensorFlowFlexUNet/Drone-Image/asset/epoch_change_infer_at_middlepoint.png" width="1024" height="auto"><br>
 <br>
 
-<b>Epoch_change_inference output at ending (epoch 51,52,53,54)</b><br>
+<b>Epoch_change_inference output at ending (epoch 47,48,49,50)</b><br>
 <img src="./projects/TensorFlowFlexUNet/Drone-Image/asset/epoch_change_infer_at_end.png" width="1024" height="auto"><br>
 <br>
 
 
-In this experiment, the training process was stopped at epoch 54 by EarlyStoppingCallback.<br><br>
-<img src="./projects/TensorFlowFlexUNet/Drone-Image/asset/train_console_output_at_epoch54.png" width="880" height="auto"><br>
+In this experiment, the training process was stopped at epoch 50 by EarlyStoppingCallback.<br><br>
+<img src="./projects/TensorFlowFlexUNet/Drone-Image/asset/train_console_output_at_epoch50.png" width="880" height="auto"><br>
 <br>
 
 <a href="./projects/TensorFlowFlexUNet/Drone-Image/eval/train_metrics.csv">train_metrics.csv</a><br>
@@ -339,13 +349,18 @@ python ../../../src/TensorFlowFlexUNetEvaluator.py ./train_eval_infer.config
 </pre>
 
 Evaluation console output:<br>
-<img src="./projects/TensorFlowFlexUNet/Drone-Image/asset/evaluate_console_output_at_epoch54.png" width="880" height="auto">
+<img src="./projects/TensorFlowFlexUNet/Drone-Image/asset/evaluate_console_output_at_epoch50.png" width="880" height="auto">
 <br><br>Image-Segmentation-Aerial-Imagery
 
 <a href="./projects/TensorFlowFlexUNet/Drone-Image/evaluation.csv">evaluation.csv</a><br>
 
 The loss (categorical_crossentropy) to this Drone-Image/test was not low, and dice_coef_multiclass not high as shown below.
 <br>
+<pre>
+categorical_crossentropy,0.4031
+dice_coef_multiclass,0.8418
+</pre>
+, which were slightly improved from the previos results.
 <pre>
 categorical_crossentropy,0.5267
 dice_coef_multiclass,0.8366
@@ -377,10 +392,11 @@ python ../../../src/TensorFlowFlexUNetTiledInferencer.py ./train_eval_infer.conf
 <hr>
 <b>Enlarged images and masks for the original Drone Images of 3.8K to 4.6K  pixels</b><br>
 As shown below, the tiled_inferred masks predicted by our segmentation model trained on the 
-Tiled dataset appear similar to the ground truth masks, but they lack precision in certain areas.<br>
-<b>rgb_map= {Outdoor structures:(237,237,237), Buildings:(181,0,0),Paved ground:(135,135,135),
-Non-paved ground:(189,107,0),Train tracks:(128,0,128),Plants:(31,123,22),Wheeled vehicles:(6,0,30),Water:(0,168,255),People:(240,255,0)}</b>
-<br><br>
+Tiled dataset appear similar to the ground truth masks, but they lack precision in certain areas,
+especially failed to segment whitish Outdoorstructures regions.<br>
+<a href="#color_class_mapping_table">Drone Image color class mapping table</a>
+<br>
+<br>
 <table>
 <tr>
 
